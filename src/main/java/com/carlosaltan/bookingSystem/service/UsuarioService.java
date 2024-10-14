@@ -1,5 +1,7 @@
 package com.carlosaltan.bookingSystem.service;
 import com.carlosaltan.bookingSystem.model.Usuario;
+import com.carlosaltan.bookingSystem.repository.UserReposiroty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,40 +12,36 @@ import java.util.Optional;
 
 @Service
 public class UsuarioService implements IUsuarioService{
-    private final Map<Long, Usuario> usuarios = new HashMap<>();
-    private Long currentId = 1L;
+
+    @Autowired
+    private UserReposiroty usuarioRepository;
 
     @Override
     public Usuario createUsuario(Usuario usuario) {
-        usuario.setId(currentId++);
-        usuarios.put(usuario.getId(), usuario);
-        System.out.println(usuario);
-        return usuario;
+        return usuarioRepository.save(usuario);
     }
 
-    @Override
-    public Optional<Usuario> searchUsuario(Long id) {
-        return Optional.ofNullable(usuarios.get(id));
+
+    public Optional<Usuario> searchUsuario(String id) {
+        return usuarioRepository.findById(id);
     }
 
-    @Override
-    public Usuario updateUsuario(Long id, Usuario usuario) {
-        if (usuarios.containsKey(id)) {
+    public Usuario updateUsuario(String id, Usuario usuario) {
+        if (usuarioRepository.existsById(id)) {
             usuario.setId(id);
-            usuarios.put(id, usuario);
-            return usuario;
+            return usuarioRepository.save(usuario);
         }
         return null;
     }
 
-    @Override
-    public void deleteUsuario(Long id) {
-        usuarios.remove(id);
+
+    public void deleteUsuario(String id) {
+        usuarioRepository.deleteById(id);
     }
 
     @Override
     public List<Usuario> getAllUsuarios() {
-        return new ArrayList<>(usuarios.values());
+        return usuarioRepository.findAll();
     }
 
 }

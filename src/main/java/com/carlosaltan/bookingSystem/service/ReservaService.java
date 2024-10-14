@@ -4,44 +4,49 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import com.carlosaltan.bookingSystem.excepcion.ResourceNotFoundException;
 import com.carlosaltan.bookingSystem.model.Reserva;
+import com.carlosaltan.bookingSystem.repository.ReservaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ReservaService implements IReservaService {
-    private final Map<Long, Reserva> reservas = new HashMap<>();
-    private Long currentId = 1L;
+
+    @Autowired
+    private ReservaRepository reservaRepository;
 
     @Override
     public Reserva createReserva(Reserva reserva) {
-        reserva.setId(currentId++);
-        reservas.put(reserva.getId(), reserva);
-        return reserva;
+        return reservaRepository.save(reserva);
     }
 
     @Override
-    public Optional<Reserva> searchReserva(Long id) {
-        return Optional.ofNullable(reservas.get(id));
+    public Optional<Reserva> searchReserva(String id) {
+        return reservaRepository.findById(id);
     }
 
     @Override
-    public Reserva updateReserva(Long id, Reserva reserva) {
-        if (reservas.containsKey(id)) {
+    public Reserva updateReserva(String id, Reserva reserva) {
+        if (reservaRepository.existsById(id)) {
             reserva.setId(id);
-            reservas.put(id, reserva);
-            return reserva;
+            return reservaRepository.save(reserva);
         }
-        return null;
+        throw new ResourceNotFoundException("Reserva no encontrada con ID: " + id); // Manejo de excepciones
     }
 
     @Override
-    public void deleteReserva(Long id) {
-        reservas.remove(id);
+    public void deleteReserva(String id) {
+        if (reservaRepository.existsById(id)) {
+            reservaRepository.deleteById(id);
+        } else {
+            throw new ResourceNotFoundException("Reserva no encontrada con ID: " + id); // Manejo de excepciones
+        }
     }
 
     @Override
     public List<Reserva> getAllReservas() {
-        return new ArrayList<>(reservas.values());
+        return reservaRepository.findAll();
     }
-
 }

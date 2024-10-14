@@ -9,6 +9,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/usuarios")
 public class UsuarioController {
+
     @Autowired
     private UsuarioService usuarioService;
 
@@ -18,17 +19,17 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Usuario> getUsuario(@PathVariable Long id) {
+    public Optional<Usuario> getUsuario(@PathVariable String id) {
         return usuarioService.searchUsuario(id);
     }
 
     @PutMapping("/{id}")
-    public Usuario updateUsuario(@PathVariable Long id, @RequestBody Usuario usuario) {
+    public Usuario updateUsuario(@PathVariable String id, @RequestBody Usuario usuario) {
         return usuarioService.updateUsuario(id, usuario);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUsuario(@PathVariable Long id) {
+    public void deleteUsuario(@PathVariable String id) {
         usuarioService.deleteUsuario(id);
     }
 
