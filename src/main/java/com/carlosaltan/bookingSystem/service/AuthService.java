@@ -40,6 +40,8 @@ public class AuthService {
     public AuthDto register(final RegisterDto request){
         Usuario user = new Usuario();
         user.setName(request.getName());
+        user.setSurname(request.getSurname());
+        user.setDpi(request.getDpi());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.ROLE_USER);
