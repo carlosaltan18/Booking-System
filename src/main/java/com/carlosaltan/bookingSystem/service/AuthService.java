@@ -38,6 +38,9 @@ public class AuthService {
     }
 
     public AuthDto register(final RegisterDto request){
+        if (request.getDpi() == null || request.getDpi().length() != 13) {
+            throw new IllegalArgumentException("Invalid DPI: DPI must have exactly 13 digits.");
+        }
         Usuario user = new Usuario();
         user.setName(request.getName());
         user.setSurname(request.getSurname());

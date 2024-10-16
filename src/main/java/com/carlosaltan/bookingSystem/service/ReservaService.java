@@ -33,7 +33,7 @@ public class ReservaService implements IReservaService {
             reserva.setId(id);
             return reservaRepository.save(reserva);
         }
-        throw new ResourceNotFoundException("Reserva no encontrada con ID: " + id); // Manejo de excepciones
+        throw new ResourceNotFoundException("Reserva no encontrada con ID: " + id);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ReservaService implements IReservaService {
         if (reservaRepository.existsById(id)) {
             reservaRepository.deleteById(id);
         } else {
-            throw new ResourceNotFoundException("Reserva no encontrada con ID: " + id); // Manejo de excepciones
+            throw new ResourceNotFoundException("Reserva no encontrada con ID: " + id);
         }
     }
 
